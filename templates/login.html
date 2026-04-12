@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+  }
+
+  .login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    position: relative;
+  }
+  
+  .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 32px 40px;
+    box-sizing: border-box;
+  }
+
+  .login-logo {
+    max-width: 240px; 
+    height: auto;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 36px 32px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+  }
+
+  .login-card h1 {
+    margin: 0 0 24px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #f1f1f1;
+    text-align: center;
+  }
+
+  .field-group { margin-bottom: 14px; }
+
+  .field-group label {
+    display: block;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+
+  .field-group input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 2px;
+    color: #f1f1f1;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+
+  .field-group input:focus { border-color: #555; }
+  .field-group input::placeholder { color: #444; }
+
+  .login-card button {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 11px;
+    background: #2a2a2a;
+    border: 1px solid #383838;
+    border-radius: 2px;
+    color: #f1f1f1;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .login-card button:hover { background: #333; }
+</style>
+
+<div class="login-wrapper">
+  <div class="header">
+    <img src="{% static 'images/logo.png' %}" alt="TicketFlow Logo" class="login-logo">
+  </div>
+  <div class="login-card">
+    <h1>Ticket Portal</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field-group">
+        <label for="employee_id">Employee ID</label>
+        <input type="text" id="employee_id" name="employee_id" placeholder="Employee ID">
+      </div>
+      <div class="field-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password">
+      </div>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
