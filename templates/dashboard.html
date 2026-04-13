@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        color: #f1f1f1;
+        font-family: Arial, sans-serif;
+    }
+
+    .dashboard-wrapper {
+        min-height: 100vh;
+        padding: 40px;
+        background: #111;
+    }
+
+    .dashboard-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        border-radius: 10px;
+        padding: 32px;
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 28px;
+    }
+
+    .subtext {
+        color: #999;
+        margin-bottom: 24px;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 24px;
+    }
+
+    .stat-box {
+        background: #111;
+        border: 1px solid #2f2f2f;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .stat-box h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        color: #bbb;
+    }
+
+    .stat-box p {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-card">
+        <h1>Dashboard</h1>
+        <p class="subtext">Welcome, {{ request.user.first_name }} (Employee ID: {{ request.user.employee_id }})</p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Open Tickets</h2>
+                <p>0</p>
+            </div>
+            <div class="stat-box">
+                <h2>Pending Tickets</h2>
+                <p>0</p>
+            </div>
+            <div class="stat-box">
+                <h2>Closed Tickets</h2>
+                <p>0</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
