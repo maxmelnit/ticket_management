@@ -106,9 +106,14 @@
     .priority-high { color: #fb923c; }
     .priority-urgent { color: #ef4444; font-weight: bold; }
 
-    .ticket-subject {
-        font-weight: 500;
+    .ticket-subject a {
+        text-decoration: none;
         color: #fff;
+        transition: color 0.2s ease;
+    }
+
+    .ticket-subject a:hover {
+        color: #60a5fa;
     }
     
     .ticket-id {
@@ -157,7 +162,11 @@
                     {% for ticket in tickets %}
                     <tr>
                         <td class="ticket-id">#{{ ticket.id }}</td>
-                        <td class="ticket-subject">{{ ticket.subject }}</td>
+                        <td class="ticket-subject">
+                            <a href="{% url 'ticket_detail' ticket.id %}">
+                                {{ ticket.subject }}
+                            </a>
+                        </td>
                         <td>
                             <span class="priority-badge priority-{{ ticket.priority|lower }}">
                                 {{ ticket.priority }}

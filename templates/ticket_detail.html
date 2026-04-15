@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        color: #f1f1f1;
+    }
+
+    .detail-wrapper {
+        min-height: 100vh;
+        padding: 40px;
+        background: #111;
+    }
+
+    .dashboard-card {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        border-radius: 10px;
+        padding: 32px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #2f2f2f;
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+    }
+
+    .header-section h1 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        color: #fff;
+    }
+
+    .ticket-meta {
+        color: #888;
+        font-size: 14px;
+    }
+
+    .status-badge,
+    .priority-badge {
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: capitalize;
+        padding: 4px 10px;
+        border-radius: 12px;
+        background: #2a2a2a;
+        display: inline-block;
+        margin-left: 8px;
+    }
+
+    .status-open {
+        color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+    }
+
+    .status-pending {
+        color: #facc15;
+        background: rgba(250, 204, 21, 0.1);
+    }
+
+    .status-closed {
+        color: #9ca3af;
+        background: rgba(156, 163, 175, 0.1);
+    }
+
+    .priority-low {
+        color: #9ca3af;
+    }
+
+    .priority-medium {
+        color: #60a5fa;
+    }
+
+    .priority-high {
+        color: #fb923c;
+    }
+
+    .priority-urgent {
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .back-btn {
+        background: #111;
+        color: #bbb;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid #2f2f2f;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+
+    .back-btn:hover {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+
+    .message-body {
+        background: #111;
+        border: 1px solid #2f2f2f;
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 32px;
+        line-height: 1.6;
+        color: #e5e5e5;
+        white-space: pre-wrap;
+    }
+
+    .reply-section h2 {
+        font-size: 18px;
+        color: #fff;
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
+
+    .reply-form textarea {
+        width: 100%;
+        min-height: 150px;
+        background: #111;
+        border: 1px solid #2f2f2f;
+        border-radius: 8px;
+        padding: 16px;
+        color: #e5e5e5;
+        font-family: inherit;
+        font-size: 15px;
+        resize: vertical;
+        box-sizing: border-box;
+        margin-bottom: 16px;
+    }
+
+    .reply-form textarea:focus {
+        outline: none;
+        border-color: #60a5fa;
+    }
+
+    .submit-btn {
+        background: #4f46e5;
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .submit-btn:hover {
+        background: #4338ca;
+    }
+
+    .closed-notice {
+        background: rgba(156, 163, 175, 0.1);
+        color: #9ca3af;
+        padding: 16px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid #2f2f2f;
+    }
+</style>
+
+<div class="detail-wrapper">
+    <div class="dashboard-card">
+        <div class="header-section">
+            <div>
+                <h1>{{ ticket.subject }}</h1>
+                <div class="ticket-meta">
+                    Ticket #{{ ticket.id }} • {{ ticket.created_at|date:"M d, Y H:i" }}
+                    <span class="status-badge status-{{ ticket.status|lower }}">{{ ticket.status }}</span>
+                    <span class="priority-badge priority-{{ ticket.priority|lower }}">Priority: {{ ticket.priority
+                        }}</span>
+                </div>
+            </div>
+            <a href="{% url 'dashboard' %}" class="back-btn">← Back</a>
+        </div>
+
+        <div class="message-body">{{ ticket.message_body }}</div>
+
+        <div class="reply-section">
+            {% if ticket.status != "closed" %}
+            <h2>Reply & Resolve</h2>
+            <form class="reply-form" method="POST">
+                {% csrf_token %}
+                <textarea name="resolution_body" placeholder="Write your resolution/reply here..." required></textarea>
+                <button type="submit" class="submit-btn">Send Reply & Close Ticket</button>
+            </form>
+            {% else %}
+            <div class="closed-notice">
+                This ticket has been resolved and closed.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

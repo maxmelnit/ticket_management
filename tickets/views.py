@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from tickets.models import TicketAssignment
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from tickets.models import Ticket, TicketResolution
 
 @login_required
 def ticket_list_view(request):
+    
     # Get all assignments for the logged-in employee
     assignments = TicketAssignment.objects.filter(employee_assigned_to=request.user).select_related('ticket', 'ticket__issue_type', 'ticket__customer_email')
     
@@ -27,3 +31,34 @@ def ticket_list_view(request):
         'current_status': status_filter or 'All',
     }
     return render(request, "ticket_list.html", context)
+
+
+@login_required
+def ticket_detail_view(request, ticket_id):
+
+    # Get the actual ticket for the specific ticket id
+    ticket = Ticket.objects.get(id=ticket_id)
+
+    # Use post to submit a ticket resolution in the form
+    if request.method == "POST":
+        resolution_body = request.POST.get("resolution_body", "").strip()
+
+        # Make a new ticket resolution, with the filled details
+        TicketResolution.objects.create(
+            resolution_subject=f"RE: {ticket.subject}",
+            resolution_body=resolution_body,
+            ticket=ticket,
+            employee=request.user
+        )
+
+        # Close the ticket, save it, and redirect back to the dashboard
+        ticket.status = "closed"
+        ticket.save()
+        return redirect("dashboard")
+
+    # In the case that we just open the ticket, we move it to open from pending
+    if ticket.status == "pending":
+        ticket.status = "open"
+        ticket.save()
+
+    return render(request, "ticket_detail.html", {"ticket": ticket})

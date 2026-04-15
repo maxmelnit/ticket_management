@@ -19,11 +19,12 @@ from django.contrib import admin
 from django.urls import path
 from users.views import login_view
 from users.views import dashboard_view
-from tickets.views import ticket_list_view
+from tickets.views import ticket_list_view, ticket_detail_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", login_view, name="login"),
     path("dashboard/", dashboard_view, name="dashboard"),
     path("tickets/", ticket_list_view, name="ticket_list"),
+    path("tickets/<int:ticket_id>/", ticket_detail_view, name="ticket_detail"),
 ]
