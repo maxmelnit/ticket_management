@@ -45,7 +45,7 @@ class Ticket(models.Model):
 
     subject = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="open")
     message_body = models.TextField()
 
     issue_type = models.ForeignKey(

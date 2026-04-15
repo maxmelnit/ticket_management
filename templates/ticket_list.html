@@ -1,31 +1,188 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Tickets</h1>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Subject</th>
-            <th>Status</th>
-            <th>Issue Type</th>
-            <th>Created</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ ticket.id }}</td>
-            <td>{{ ticket.subject }}</td>
-            <td>{{ ticket.status }}</td>
-            <td>{{ ticket.issue_type }}</td>
-            <td>{{ ticket.created_at }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">No tickets found.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<style>
+    body {
+        margin: 0;
+        background: #111;
+        color: #f1f1f1;
+        /* Inherit Ubuntu font from base.html */
+    }
+
+    .tickets-wrapper {
+        min-height: 100vh;
+        padding: 40px;
+        background: #111;
+    }
+
+    .dashboard-card {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        border-radius: 10px;
+        padding: 32px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .header-section h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+    
+    .back-btn {
+        background: #111;
+        color: #bbb;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        border: 1px solid #2f2f2f;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+    
+    .back-btn:hover {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+
+    .table-container {
+        background: #111;
+        border: 1px solid #2f2f2f;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 24px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    th {
+        padding: 16px 20px;
+        font-size: 14px;
+        color: #bbb;
+        border-bottom: 1px solid #2f2f2f;
+        background: #1a1a1a;
+        font-weight: 500;
+    }
+
+    td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #2f2f2f;
+        vertical-align: middle;
+        font-size: 15px;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover {
+        background: #1a1a1a;
+    }
+
+    .status-badge, .priority-badge {
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+
+    .status-open { color: #4ade80; }
+    .status-pending { color: #facc15; }
+    .status-closed { color: #9ca3af; }
+
+    .priority-low { color: #9ca3af; }
+    .priority-medium { color: #60a5fa; }
+    .priority-high { color: #fb923c; }
+    .priority-urgent { color: #ef4444; font-weight: bold; }
+
+    .ticket-subject {
+        font-weight: 500;
+        color: #fff;
+    }
+    
+    .ticket-id {
+        color: #888;
+    }
+    
+    .empty-state {
+        text-align: left;
+        padding: 40px 20px;
+        color: #999;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 8px 0;
+        color: #bbb;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+</style>
+
+<div class="tickets-wrapper">
+    <div class="dashboard-card">
+        <div class="header-section">
+            <h1>
+                {% if current_status != 'All' %}{{ current_status|title }} {% endif %}Tickets
+            </h1>
+            <a href="{% url 'dashboard' %}" class="back-btn">← Back</a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Subject</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                    <tr>
+                        <td class="ticket-id">#{{ ticket.id }}</td>
+                        <td class="ticket-subject">{{ ticket.subject }}</td>
+                        <td>
+                            <span class="priority-badge priority-{{ ticket.priority|lower }}">
+                                {{ ticket.priority }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{ ticket.status|lower }}">
+                                {{ ticket.status }}
+                            </span>
+                        </td>
+                        <td style="color: #888;">{{ ticket.created_at|date:"M d, Y H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <h3>No tickets found.</h3>
+                                <p>There are no tickets matching this filter.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

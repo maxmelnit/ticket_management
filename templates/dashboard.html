@@ -41,11 +41,25 @@
         margin-top: 24px;
     }
 
+    .stat-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
     .stat-box {
         background: #111;
         border: 1px solid #2f2f2f;
         border-radius: 8px;
         padding: 20px;
+        transition: all 0.2s ease;
+    }
+
+    .stat-box:hover {
+        background: #1a1a1a;
+        border-color: #444;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     .stat-box h2 {
@@ -68,18 +82,24 @@
         <p class="subtext">Welcome, {{ request.user.first_name }} (Employee ID: {{ request.user.employee_id }})</p>
 
         <div class="stats">
-            <div class="stat-box">
-                <h2>Open Tickets</h2>
-                <p>{{ open_count }}</p>
-            </div>
-            <div class="stat-box">
-                <h2>Pending Tickets</h2>
-                <p>{{ pending_count }}</p>
-            </div>
-            <div class="stat-box">
-                <h2>Closed Tickets</h2>
-                <p>{{ closed_count }}</p>
-            </div>
+            <a href="{% url 'ticket_list' %}?status=open" class="stat-link">
+                <div class="stat-box">
+                    <h2>Open Tickets</h2>
+                    <p>{{ open_count }}</p>
+                </div>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=pending" class="stat-link">
+                <div class="stat-box">
+                    <h2>Pending Tickets</h2>
+                    <p>{{ pending_count }}</p>
+                </div>
+            </a>
+            <a href="{% url 'ticket_list' %}?status=closed" class="stat-link">
+                <div class="stat-box">
+                    <h2>Closed Tickets</h2>
+                    <p>{{ closed_count }}</p>
+                </div>
+            </a>
         </div>
     </div>
 </div>
