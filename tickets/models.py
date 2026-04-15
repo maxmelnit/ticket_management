@@ -142,7 +142,7 @@ class TicketAssignment(models.Model):
         ("urgent", "Urgent"),
     ]
 
-    assignment_number = models.IntegerField(primary_key=True)
+    assignment_number = models.AutoField(primary_key=True)
     clearance_required = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(4)]
     )
