@@ -4,6 +4,8 @@ from email.parser import BytesParser
 import imaplib
 import os
 from email.parser import Parser
+import email.utils
+from customers.models import Customer
 
 # How often to fetch new tickets, in seconds
 FREQ = 30
@@ -68,19 +70,43 @@ def start_email_fetcher():
         
             for msg in emails:
 
-                # Get subject/body of the email
+                # Get subject/body/from of the email
                 subject = msg.get("Subject", "No Subject")
                 body_part = msg.get_body(preferencelist=('plain',))
+                from_header = msg.get("From", "Unknown <unknown@example.com>")
 
                 if body_part:
                     body = body_part.get_content()
                 else:
                     body = "No text content found."
+                    
+                
+                # Parse the sender email
+                raw_name, email_address = email.utils.parseaddr(from_header)
+                if not email_address:
+                    email_address = "unknown@example.com"
+                    
+                # We have to turn the sender into a customer object 
+                raw_name = raw_name.strip() or "Unknown"
+
+                # At most 2 parts, since they could have middle name too
+                name_parts = raw_name.split(" ", 1)
+                first_name = name_parts[0]
+                last_name = name_parts[1] if len(name_parts) > 1 else "User"
+
+                customer, created = Customer.objects.get_or_create(
+                    email=email_address[:30],
+                    defaults={
+                        "first_name": first_name[:30],
+                        "last_name": last_name[:30],
+                    }
+                )
      
                 # Making a new ticket will fire off the signal in tickets/signals
                 Ticket.objects.create(
                     subject=subject[:50], 
-                    message_body=body
+                    message_body=body,
+                    customer_email=customer
                 )
 
         except Exception as e:

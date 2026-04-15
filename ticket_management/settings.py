@@ -56,6 +56,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "ticket_management.urls"
 
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
