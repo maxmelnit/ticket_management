@@ -28,4 +28,14 @@ def login_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, "dashboard.html")
+    from tickets.models import TicketAssignment
+
+    assignments = TicketAssignment.objects.filter(employee_assigned_to=request.user)
+
+    context = {
+        "open_count": assignments.filter(ticket__status="open").count(),
+        "pending_count": assignments.filter(ticket__status="pending").count(),
+        "closed_count": assignments.filter(ticket__status="closed").count(),
+    }
+
+    return render(request, "dashboard.html", context)
