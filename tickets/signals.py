@@ -9,18 +9,25 @@ logger = logging.getLogger(__name__)
 
 # Every time we make a ticket, we need a ticket assignment to some employee that can handle it
 @receiver(post_save, sender=Ticket)
-def create_ticket_assignment(instance, created, **kwargs):
-    priority = None
-    clearance = None
-    language_code = None
-    
+def create_ticket_assignment(sender, instance, created, **kwargs):
     if created:
+        # Defaults in case the AI router is unavailable
+        priority = "medium"
+        clearance = 1
+        language_code = "en"
+        employee = None
 
-        # Find an employee that is able to take the ticket
         try:
+            # Use the AI router to determine priority, tier, and language
+            result = route(instance)
+            priority = result.get("priority", "medium")
+            clearance = result.get("tier", 1)
+            language_code = result.get("language", "en")
+
+            # Find an employee that is able to take the ticket
             employee = find_employee(priority, clearance, language_code)
         except Exception as e:
-            logger.log("No suitable support employee available for ticket.")
+            logger.warning(f"Ticket routing failed for Ticket #{instance.id}: {e}")
 
         TicketAssignment.objects.create(
             ticket=instance,
