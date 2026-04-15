@@ -35,7 +35,8 @@ def route(ticket):
     "high: Should be addressed very quickly. Important issues that have real consequences if not addressed."
     "urgent: Has to be fixed right now. Could cause serious damage if not addressed."
     "Each tier as has the permissions for tiers below it too.\n\n"
-    "Return priority, tier, and language.\n\n"
+    "Return priority, tier, and language.\n"
+    "Note that language should use ISO 639-1. For example, en-US, ar-DZ, nl-BE, etc. (Note the region capitalization)"
     "Subject: " + ticket.subject + "\n"
     "Message: " + ticket.message_body + "\n"
     )
@@ -74,3 +75,16 @@ def find_employee(priority, tier, language_code):
     ).order_by('open_assignments', 'tier')
 
     return possible_emps.first() 
+
+# Just test to see if response works
+if __name__ == "__main__":
+    import os, sys
+    import django
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ticket_management.settings")
+    django.setup()
+
+    from tickets.models import Ticket
+    ticket = Ticket(subject="Credit card hacked", message_body="I want my money back or ill charge back")
+    result = route(ticket)
+    print("Result:", result)

@@ -1,11 +1,11 @@
 import os
 import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ticket_management.settings")  # change this
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ticket_management.settings")
 django.setup()
 
 from tickets.models import Ticket
-from ticket_routing.router import route, find_employee   # change this
+from ticket_routing.router import route, find_employee
 
 
 def main():
