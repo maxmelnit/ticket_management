@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
+from tickets.models import TicketAssignment
+from django.contrib.auth import logout
 
 def login_view(request):
 
@@ -28,7 +29,6 @@ def login_view(request):
 
 @login_required
 def dashboard_view(request):
-    from tickets.models import TicketAssignment
 
     assignments = TicketAssignment.objects.filter(employee_assigned_to=request.user)
 
@@ -39,3 +39,7 @@ def dashboard_view(request):
     }
 
     return render(request, "dashboard.html", context)
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")
