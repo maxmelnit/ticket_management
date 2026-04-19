@@ -10,14 +10,10 @@ def login_view(request):
     # Authenticate users on login form submission:
     if request.method == "POST":
 
-        # Get the employee ID and pass from form
         employee_id = request.POST.get("employee_id")
         password = request.POST.get("password")
-
-        # Authenticate the user
         user = authenticate(request, employee_id=employee_id, password=password)
 
-        # If that user exists and is correct, send them to the dashboard, otherwise error
         if user is not None:
             login(request, user)
             return redirect("dashboard")
@@ -29,7 +25,8 @@ def login_view(request):
 
 @login_required
 def dashboard_view(request):
-
+    # Get the dashboard view for employees
+    
     assignments = TicketAssignment.objects.filter(employee_assigned_to=request.user)
 
     context = {
