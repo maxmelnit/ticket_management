@@ -3,7 +3,8 @@
 
 {% block content %}
 <style>
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
     background: #111;
@@ -17,18 +18,18 @@
     background: #111;
     position: relative;
   }
-  
+
   .header {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 32px 40px;
+    padding: 0px 0px;
     box-sizing: border-box;
   }
 
   .login-logo {
-    max-width: 240px; 
+    max-width: 320px;
     height: auto;
   }
 
@@ -49,7 +50,9 @@
     text-align: center;
   }
 
-  .field-group { margin-bottom: 14px; }
+  .field-group {
+    margin-bottom: 14px;
+  }
 
   .field-group label {
     display: block;
@@ -72,8 +75,13 @@
     transition: border-color 0.15s;
   }
 
-  .field-group input:focus { border-color: #555; }
-  .field-group input::placeholder { color: #444; }
+  .field-group input:focus {
+    border-color: #555;
+  }
+
+  .field-group input::placeholder {
+    color: #444;
+  }
 
   .login-card button {
     display: block;
@@ -89,7 +97,9 @@
     transition: background 0.15s;
   }
 
-  .login-card button:hover { background: #333; }
+  .login-card button:hover {
+    background: #333;
+  }
 </style>
 
 <div class="login-wrapper">
