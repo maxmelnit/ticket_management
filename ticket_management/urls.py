@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from users.views import login_view, dashboard_view, logout_view
-from tickets.views import ticket_list_view, ticket_detail_view
+from tickets.views import ticket_list_view, ticket_detail_view, escalate_ticket
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     path("dashboard/", dashboard_view, name="dashboard"),
     path("tickets/", ticket_list_view, name="ticket_list"),
     path("tickets/<int:ticket_id>/", ticket_detail_view, name="ticket_detail"),
+    path("tickets/<int:ticket_id>/escalate/", escalate_ticket, name="escalate_ticket"),
 ]

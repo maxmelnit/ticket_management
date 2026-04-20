@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from tickets.models import TicketAssignment
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from tickets.models import Ticket, TicketResolution
+from tickets.models import Ticket, TicketResolution, TicketEscalation, TicketAssignment
+from ticket_routing.router import find_employee
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.mail import get_connection
@@ -94,3 +95,37 @@ def ticket_detail_view(request, ticket_id):
         ticket.save()
 
     return render(request, "ticket_detail.html", {"ticket": ticket})
+
+
+@login_required
+def escalate_ticket(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+    assignment = TicketAssignment.objects.get(ticket=ticket)
+
+    # We can escalate tickets for employees in tiers 1, 2, 3
+    if request.user.tier < 4:
+        current_tier = request.user.tier
+        next_tier = current_tier + 1
+
+        # Determine the language of ticket and assign it to a new employee
+        language_code = "en-US"
+        if ticket.lang_code:
+            language_code = ticket.lang_code.language_code
+
+
+        new_employee = find_employee(assignment.priority, next_tier, language_code)
+
+        # Log the escalation
+        TicketEscalation.objects.create(
+            ticket=ticket,
+            employee_id_from=request.user,
+            employee_id_to=new_employee,
+            escalation_reason=f"Automated escalation from Tier {current_tier} to Tier {next_tier}"
+        )
+
+        # Update the assignment
+        assignment.clearance_required = next_tier
+        assignment.employee_assigned_to = new_employee
+        assignment.save()
+
+    return redirect("dashboard")

@@ -191,7 +191,12 @@
             <form class="reply-form" method="POST">
                 {% csrf_token %}
                 <textarea name="resolution_body" placeholder="Write your resolution/reply here..." required></textarea>
-                <button type="submit" class="submit-btn">Send Reply & Close Ticket</button>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button type="submit" class="submit-btn" style="flex: 2;">Send Reply & Close Ticket</button>
+                    {% if request.user.tier < 4 %}
+                    <a href="{% url 'escalate_ticket' ticket.id %}" class="submit-btn" style="flex: 1; background: #fb923c; text-align: center; text-decoration: none;">Escalate Ticket</a>
+                    {% endif %}
+                </div>
             </form>
             {% else %}
             <div class="closed-notice">
