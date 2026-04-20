@@ -51,6 +51,8 @@ def route(ticket):
 
     result = json.loads(response.message.content)
 
+    result["model_id"] = "gemma3"
+
     return result
 
 
