@@ -39,4 +39,4 @@ The application will be at [http://localhost:8000](http://localhost:8000).
 docker exec -it ticket_web python manage.py createsuperuser
 
 ### 4. Important information:
-To make the ticket routing work, you will need to fill the database for the employee language and the language table. These are empty by default in the Docker environment. Additionally, ticket routing is done through Ollama, a local LLM. This will be SO SLOW if you don't have a good computer. This can be reconfigured to use a frontier model API. 
+To make the ticket routing work, you will need to fill the database for the employee language and the language table via the admin panel. These are empty by default in the environment. Additionally, ticket routing is done through Ollama, a local LLM.

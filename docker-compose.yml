@@ -26,6 +26,10 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
+      - EMAIL=${EMAIL}
+      - PASS=${PASS}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
       - DEBUG=${DEBUG}
       - OLLAMA_HOST=${OLLAMA_HOST}
     depends_on:
