@@ -1,10 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import SupportEmployee
+from tickets.models import EmployeeLanguage
 
+class EmployeeLanguageInline(admin.TabularInline):
+    model = EmployeeLanguage
+    extra = 1
 
 @admin.register(SupportEmployee)
 class SupportEmployeeAdmin(UserAdmin):
+    inlines = [EmployeeLanguageInline]
     model = SupportEmployee
     list_display = ("employee_id", "first_name", "last_name", "tier", "is_staff", "is_active")
     ordering = ("employee_id",)

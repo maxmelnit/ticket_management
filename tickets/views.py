@@ -44,6 +44,10 @@ def ticket_detail_view(request, ticket_id):
 
     # Get the actual ticket for the specific ticket id
     ticket = Ticket.objects.get(id=ticket_id)
+    
+    assignment = TicketAssignment.objects.filter(ticket=ticket).first()
+    if assignment:
+        ticket.priority = assignment.priority
 
     # Use post to submit a ticket resolution in the form
     if request.method == "POST":
